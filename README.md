@@ -1,4 +1,4 @@
-### Introduction
+[![Tailcall](https://raw.githubusercontent.com/tailcallhq/tailcall/main/assets/logo_main.svg)](https://tailcall.run)
 
 While building [Tailcall], we frequently engage in internal debates about the low-level design of our application. One recurring topic is pattern matching versus dynamic dispatch. This repository aims to explore two fundamental concepts: **pattern matching** and **dynamic dispatch**, and understand the actual differences in performance.
 
