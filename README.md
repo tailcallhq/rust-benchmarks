@@ -1,10 +1,10 @@
 ### Introduction
 
-While building [Tailcall] we often internally have debates about the low-level design of our application. Pattern matching vs dynamic dispatch has been a common one. This repo intends to explore two fundamental concepts: **pattern matching** and **dynamic dispatch** and understand the actual difference in performance.
+While building [Tailcall], we frequently engage in internal debates about the low-level design of our application. One recurring topic is pattern matching versus dynamic dispatch. This repository aims to explore two fundamental concepts: **pattern matching** and **dynamic dispatch**, and understand the actual differences in performance.
 
 [Tailcall]: https://github.com/tailcallhq/tailcall
 
-Based on the benchmark results, pattern matching in Rust is significantly faster than dynamic dispatch (Not surprised!). The execution times indicate that pattern matching (around 320 picoseconds per operation) is roughly 72,000 times faster than dynamic dispatch (around 23 nanoseconds on the lower end of the spectrum).
+Based on the benchmark results, pattern matching in Rust is significantly faster than dynamic dispatch—no surprise there! The execution times indicate that pattern matching, at around 320 picoseconds per operation, is roughly 72,000 times faster than dynamic dispatch, which operates at around 23 nanoseconds on the lower end of the spectrum.
 
 ```
 ❯ cargo bench
@@ -35,4 +35,4 @@ Found 9 outliers among 100 measurements (9.00%)
 
 Happy coding! 🦀
 
-PS: Feel free to raise a PR, if you think there is something wrong in the way the benchmarks are designed.
+PS: Feel free to raise a PR if you think there is something wrong with the way the benchmarks are designed.
