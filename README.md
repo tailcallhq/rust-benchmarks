@@ -7,7 +7,7 @@ While building [Tailcall], we frequently engage in internal debates about the lo
 Based on the benchmark results, pattern matching in Rust is significantly faster than dynamic dispatch—no surprise there! The execution times indicate that pattern matching, at around 320 picoseconds per operation, is roughly **72,000 times faster** than dynamic dispatch, which operates at around 23 nanoseconds on the lower end of the spectrum.
 
 ```
-❯ cargo bench
+cargo bench
    Compiling rust-dynamic-dispatch-performance v0.1.0 (/Users/tushar/Documents/Projects/temp/rust-dynamic-dispatch-performance)
     Finished `bench` profile [optimized] target(s) in 1.66s
      Running unittests src/main.rs (target/release/deps/rust_dynamic_dispatch_performance-5c61e2e8a62037f3)
