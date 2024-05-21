@@ -1,42 +1,10 @@
 ### Introduction
 
-Welcome, Rustaceans! Dive into the core of Rust programming by exploring two fundamental concepts: pattern matching and dynamic dispatch. These features underpin the expressive power and flexibility of Rust, and understanding their nuances can greatly enhance your code's performance and maintainability.
+While building [Tailcall] we often internally have debates about the low-level design of our application. Pattern matching vs dynamic dispatch has been a common one. This repo intends to explore two fundamental concepts: **pattern matching** and **dynamic dispatch** and understand the actual difference in performance.
 
-### Pattern Matching
+[Tailcall]: https://github.com/tailcallhq/tailcall
 
-Pattern matching in Rust is a powerful feature that allows for concise and expressive handling of complex data structures. It lets you destructure data types, such as enums and tuples, directly in the match arms, enabling clear and straightforward data manipulation. This approach is particularly beneficial for handling nested data structures and offers precise control over program flow based on different data variants.
-
-- **Use Cases**: Pattern matching shines in scenarios where you need to unpack and handle various data forms, especially when dealing with nested enums and error handling. For example, you can seamlessly match different message types and handle each specifically with minimal boilerplate.
-
-### Dynamic Dispatch
-
-Dynamic dispatch, on the other hand, provides flexibility by allowing a function call to be resolved at runtime based on the object type it is being called on. This is achieved using trait objects in Rust, which enable polymorphism. Dynamic dispatch is typically used when different behaviors for a common trait need to be executed depending on the runtime type.
-
-- **Use Cases**: It's particularly useful in scenarios requiring high flexibility and extensibility from various object types, such as in UI frameworks or plugin systems where new types might be added without changing existing code.
-
-### Comparison
-
-| Feature         | Pattern Matching               | Dynamic Dispatch                |
-| --------------- | ------------------------------ | ------------------------------- |
-| Dispatch Type   | Compile-time (Static)          | Runtime (Dynamic)               |
-| Use Case        | Structured data handling       | Polymorphism with trait objects |
-| Performance     | Generally faster and efficient | Less efficient, more flexible   |
-| Code Complexity | Lower (with enums)             | Higher (due to trait objects)   |
-
-- **Performance**: Pattern matching is compile-time and does not involve any indirection, making it faster and more efficient. Dynamic dispatch, while more flexible, incurs a performance cost due to runtime determination of method execution【6†source】【7†source】【8†source】【9†source】.
-
-- **Flexibility**: Dynamic dispatch excels in scenarios where code must handle many different object types not known at compile time, at the expense of some performance due to virtual calls and inability to inline these calls【7†source】【9†source】.
-
-### Practical Tips
-
-1. **Pattern Matching**: Leverage the power of `match` statements to cleanly handle different cases of enums and error types. Use exhaustive matching to ensure all possible cases are handled.
-2. **Dynamic Dispatch**: Utilize trait objects when you need to operate on collections of objects of different types. Remember the trade-off between flexibility and performance.
-
-### Conclusion
-
-Both pattern matching and dynamic dispatch have their place in Rust programming. Choosing between them depends on the specific requirements of your application regarding performance and flexibility. By understanding and utilizing these features appropriately, you can write more efficient and maintainable Rust code.
-
-Happy coding! 🦀
+Based on the benchmark results, pattern matching in Rust is significantly faster than dynamic dispatch (Not surprised!). The execution times indicate that pattern matching (around 320 picoseconds per operation) is roughly 72,000 times faster than dynamic dispatch (around 23 nanoseconds on the lower end of the spectrum).
 
 ```
 ❯ cargo bench
@@ -64,3 +32,7 @@ Found 9 outliers among 100 measurements (9.00%)
   3 (3.00%) high mild
   6 (6.00%) high severe
 ```
+
+Happy coding! 🦀
+
+PS: Feel free to raise a PR, if you think there is something wrong in the way the benchmarks are designed.
