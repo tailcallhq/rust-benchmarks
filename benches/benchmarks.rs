@@ -2,7 +2,7 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use std::time::Duration;
 
 trait DoSomething {
-    fn do_it(&self) -> i32;
+    fn do_it(&self, i: i32) -> i32;
 }
 
 struct ActionOne;
@@ -10,15 +10,15 @@ struct ActionTwo;
 
 impl DoSomething for ActionOne {
     #[inline]
-    fn do_it(&self) -> i32 {
-        (1..10).fold(0, |acc, x| acc + x)
+    fn do_it(&self, i: i32) -> i32 {
+        i + i
     }
 }
 
 impl DoSomething for ActionTwo {
     #[inline]
-    fn do_it(&self) -> i32 {
-        (1..10).map(|x| x * x).sum::<i32>()
+    fn do_it(&self, i: i32) -> i32 {
+        i * i
     }
 }
 
@@ -27,22 +27,20 @@ enum Action {
     Two(ActionTwo),
 }
 
-fn dynamic_dispatch() -> i32 {
-    let actions: Vec<Box<dyn DoSomething>> = vec![Box::new(ActionOne), Box::new(ActionTwo)];
+fn dynamic_dispatch(actions: &Vec<Box<dyn DoSomething>>) -> i32 {
     let mut output = 0;
     for action in actions {
-        output = output + action.do_it();
+        output = output + action.do_it(output);
     }
     output
 }
 
-fn pattern_matching() -> i32 {
-    let actions = vec![Action::One(ActionOne), Action::Two(ActionTwo)];
+fn pattern_matching(actions: &Vec<Action>) -> i32 {
     let mut output = 0;
     for action in actions {
         match action {
-            Action::One(a) => output = output + a.do_it(),
-            Action::Two(a) => output = output + a.do_it(),
+            Action::One(a) => output = output + a.do_it(output),
+            Action::Two(a) => output = output + a.do_it(output),
         }
     }
     output
@@ -50,18 +48,22 @@ fn pattern_matching() -> i32 {
 
 fn benchmark(c: &mut Criterion) {
     let mut group = c.benchmark_group("Dispatch vs Matching");
-    group.measurement_time(Duration::new(10, 0)); // Adjust the measurement time as needed
+
+    let dynamic_actions: Vec<Box<dyn DoSomething>> = vec![Box::new(ActionOne), Box::new(ActionTwo)];
+    let static_actions: Vec<Action> = vec![Action::One(ActionOne), Action::Two(ActionTwo)];
+
+    group.measurement_time(Duration::new(10, 0));
 
     group.bench_function("Dynamic Dispatch", |b| {
         b.iter(|| {
-            let output = dynamic_dispatch();
+            let output = dynamic_dispatch(&dynamic_actions);
             black_box(output)
         })
     });
-    
+
     group.bench_function("Pattern Matching", |b| {
         b.iter(|| {
-            let output = pattern_matching();
+            let output = pattern_matching(&static_actions);
             black_box(output)
         })
     });
